@@ -106,3 +106,6 @@ Control.ca-list
 Control.ca-bundle 
 Control.system-ca-bundle 
 GitHub.sublime-settings 
+
+#We don't want migrations
+*/migrations/*py
