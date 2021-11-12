@@ -2,25 +2,22 @@ from django.test import TestCase
 from .models import User, Group
 # Create your tests here.
 
-class UserTestCase(TestCase):
 
+class UserTestCase(TestCase):
     def get_user_data(self):
-        groups = ['Admin', 'Employee']
-        Group.objects.bulk_create([Group(name=group_name) for group_name in groups])
-        admin_role = Group.objects.get(name='Admin')
-        return {'password': 'secret', 'name': 'Nasser', 'role': admin_role}
+        return {'user': {'password': 'secret', 'name': 'Nasser'}, 'groups': 'Admin'}
 
     def test_create_user_without_employee_number(self):
-        User.objects.create_user(**self.get_user_data())
+        user = User.objects.create_user(**self.get_user_data()['user'])
+        user.groups.set([Group.objects.create(name=self.get_user_data()['groups']),])
+        user.save()
 
     def test_create_user_with_correct_employee_number(self):
-        print("Testing user with 1234 employee number")
-        user = self.get_user_data()
-        user["employee_number"] = 12345
-        User.objects.create_user(**user)
+        user = User.objects.create_user(employee_number=1234, **self.get_user_data()['user'])
+        user.groups.set([Group.objects.create(name=self.get_user_data()['groups']), ])
+        user.save()
 
     def test_create_user_with_wrong_employee_number(self):
-        print("Testing user with: 123a")
-        user = self.get_user_data()
-        user["employee_number"] = '123a'
-        User.objects.create_user(**user)
+        user = User.objects.create_user(employee_number=12345, **self.get_user_data()['user'])
+        user.groups.set([Group.objects.create(name=self.get_user_data()['groups']), ])
+        user.save()
