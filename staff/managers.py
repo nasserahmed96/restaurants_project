@@ -1,5 +1,5 @@
 from django.contrib.auth.models import UserManager
-
+from django.contrib.auth.models import Group
 
 class CustomUserManager(UserManager):
     def create_user(self, password, employee_number=None, **extra_fields):

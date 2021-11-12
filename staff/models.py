@@ -8,7 +8,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     employee_number = models.CharField(max_length=4, null=False, blank=False, unique=True)
     name = models.CharField(max_length=45, null=False)
-    role = models.ManyToManyField(Group, related_name='user', verbose_name='groups')
+    groups = models.ManyToManyField(Group, related_name='user', verbose_name='groups')
+
     USERNAME_FIELD = 'employee_number'
 
     is_superuser = models.BooleanField(default=False)

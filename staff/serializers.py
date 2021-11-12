@@ -14,9 +14,13 @@ class GroupSerializer(serializers.ModelSerializer):
 class CreateUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         print("Password: ", validated_data.get("password"))
-        return User.objects.create_user(employee_number=validated_data.get('employee_number', None),
+        groups = validated_data.pop('groups')
+        user = User.objects.create_user(employee_number=validated_data.get('employee_number', None),
                                         password=validated_data.pop("password"),
                                         **validated_data)
+        user.save()
+        user.groups.set(groups)
+        return user
 
     def validate_password(self, password_plain_text):
         password_regex = re.compile(r'^[a-zA-Z0-9_\-\@\#\^\&\=\%\$\!\(\)\*\\\/]{6,}$')
@@ -28,11 +32,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
         response = dict()
         response['name'] = instance.name
         response['employee_number'] = instance.employee_number
-        response['role'] = GroupSerializer(instance.role, many=False).data
+        response['groups'] = GroupSerializer(instance.groups, many=True).data
         return response
 
     class Meta:
         model = User
-        fields = ['name', 'role', 'password']
+        fields = ['name', 'groups', 'password']
 
 
