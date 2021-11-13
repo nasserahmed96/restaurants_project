@@ -13,4 +13,4 @@ class TableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RestaurantTable
-        fields = '__all__'
+        fields = ['number', 'num_of_seats']

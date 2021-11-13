@@ -4,6 +4,7 @@ from rest_framework import status
 from django.contrib.auth.decorators import permission_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from .serializers import CreateUserSerializer
+
 # Create your views here.
 
 

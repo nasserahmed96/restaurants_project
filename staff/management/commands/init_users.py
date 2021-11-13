@@ -12,5 +12,9 @@ class Command(BaseCommand):
         super_user.groups.set([Group.objects.get(name='Admin'),])
 
     def assign_permissions_to_groups(self):
-        permissions = ['add_user', 'view_restauranttable', 'add_restauranttable']
-        Group.objects.get(name="Admin").permissions.set(Permission.objects.filter(codename__in=permissions))
+        admin_permissions = ['add_user', 'view_restauranttable', 'add_restauranttable', 'delete_restauranttable']
+        employee_permissions = ['add_reservation', 'view_reservation']
+        admin_permissions.extend(employee_permissions)
+        print("Admin permission: ", admin_permissions)
+        Group.objects.get(name="Admin").permissions.set(Permission.objects.filter(codename__in=admin_permissions))
+        Group.objects.get(name='Employee').permissions.set(Permission.objects.filter(codename__in=employee_permissions))
